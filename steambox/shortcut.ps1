@@ -56,18 +56,16 @@ foreach ($file in $appManifests) {
     $gameId = Remove-StringFromLine -FilePath "$($file.FullName)" -TargetString 'appid'
     $gameName = Remove-StringFromLine -FilePath "$($file.FullName)" -TargetString 'name'
     $gameFolderName = Remove-StringFromLine -FilePath "$($file.FullName)" -TargetString 'installdir'
+
     $gameIconLocation = FindIconFile -folder "$($dir)\common\$($gameFolderName)"
-
-    Write-Host "Game ID: $gameId"
-    Write-Host "Game Name: $gameName"
-
     $shortcut = $shell.CreateShortcut("$desktopPath\$gameName.lnk")
-    $shortcut.TargetPath = "`"C:\Program Files (x86)\Steam\Steam.exe`" -applaunch $gameId"
+    $shortcut.TargetPath = "C:\Program Files (x86)\Steam\Steam.exe"
+    $shortcut.Arguments = "-applaunch $gameId"
     $shortcut.IconLocation = "$($gameIconLocation), 0"
     $shortcut.Save()
-
-    Write-Output "---"
-
-
-
 }
+
+$shortcut = $shell.CreateShortcut("$desktopPath\Steam.lnk")
+$shortcut.TargetPath = "C:\Program Files (x86)\Steam\Steam.exe"
+$shortcut.IconLocation = "C:\Program Files (x86)\Steam\Steam.exe, 0"
+$shortcut.Save()
